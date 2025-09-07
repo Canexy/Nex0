@@ -1,0 +1,41 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Nexo.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
+        x:Class="Nexo.Views.EditEmulatorWindow"
+        Title="Editar Emulador"
+        Width="400" Height="500"
+        WindowStartupLocation="CenterOwner"
+        x:DataType="vm:EmulatorViewModel">
+
+    <StackPanel Margin="10">
+        <TextBlock Text="Nombre del emulador" Margin="0,0,0,5"/>
+        <TextBox Text="{Binding Name}" Margin="0,0,0,10"/>
+        
+        <TextBlock Text="Ruta del ejecutable" Margin="0,0,0,5"/>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBox Text="{Binding ExecutablePath}" Width="250" Margin="0,0,5,0"/>
+            <Button Content="Examinar" Command="{Binding BrowseCommand}"/>
+        </StackPanel>
+        
+        <TextBlock Text="Argumentos de línea de comandos" Margin="0,0,0,5"/>
+        <TextBox Text="{Binding Arguments}" Margin="0,0,0,10"/>
+        
+        <TextBlock Text="Extensiones Asociadas (separadas por coma)" Margin="0,0,0,5"/>
+        <TextBox Text="{Binding Extensions}" Margin="0,0,0,10"/>
+        
+        <TextBlock Text="Configuración" Margin="0,0,0,5"/>
+        <ComboBox SelectedItem="{Binding Configuration}" Margin="0,0,0,20">
+            <ComboBoxItem>Default</ComboBoxItem>
+            <ComboBoxItem>High Performance</ComboBoxItem>
+            <ComboBoxItem>Low Power</ComboBoxItem>
+        </ComboBox>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Guardar" Command="{Binding SaveCommand}" Margin="0,0,5,0"/>
+            <Button Content="Cancelar" Command="{Binding CancelCommand}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
