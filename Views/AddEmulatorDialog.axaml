@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Nexo.ViewModels"
+        x:Class="Nexo.Views.AddEmulatorDialog"
+        Width="400" Height="350"
+        Title="Agregar Emulador"
+        WindowStartupLocation="CenterOwner">
+        
+    <Window.DataContext>
+        <vm:AddEmulatorViewModel/>
+    </Window.DataContext>
+    
+    <StackPanel Margin="20">
+        <TextBlock Text="Nombre del emulador" Margin="0,0,0,5"/>
+        <TextBox Text="{Binding Name}" Margin="0,0,0,15"/>
+        
+        <TextBlock Text="Ruta del ejecutable" Margin="0,0,0,5"/>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+            <TextBox Text="{Binding ExecutablePath}" Width="250" Margin="0,0,5,0"/>
+            <Button Content="Examinar" Command="{Binding BrowseExecutableCommand}"/>
+        </StackPanel>
+        
+        <TextBlock Text="Extensiones (separadas por coma)" Margin="0,0,0,5"/>
+        <TextBox Text="{Binding Extensions}" Margin="0,0,0,15"/>
+        
+        <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" Margin="0,0,0,10"/>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cancelar" Width="80" Margin="0,0,10,0" Click="CancelButton_Click"/>
+            <Button Content="Agregar" Width="80" Click="AddButton_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mario\\Repositorios\\Nexo\\Nexo.csproj": {}
+    "C:\\Users\\mario\\Repositorios\\Nex0\\Nexo.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mario\\Repositorios\\Nexo\\Nexo.csproj": {
+    "C:\\Users\\mario\\Repositorios\\Nex0\\Nexo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mario\\Repositorios\\Nexo\\Nexo.csproj",
+        "projectUniqueName": "C:\\Users\\mario\\Repositorios\\Nex0\\Nexo.csproj",
         "projectName": "Nexo",
-        "projectPath": "C:\\Users\\mario\\Repositorios\\Nexo\\Nexo.csproj",
+        "projectPath": "C:\\Users\\mario\\Repositorios\\Nex0\\Nexo.csproj",
         "packagesPath": "C:\\Users\\mario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mario\\Repositorios\\Nexo\\obj\\",
+        "outputPath": "C:\\Users\\mario\\Repositorios\\Nex0\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\mario\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -63,6 +63,10 @@
             "Avalonia.Themes.Fluent": {
               "target": "Package",
               "version": "[11.1.0, )"
+            },
+            "CommunityToolkit.Mvvm": {
+              "target": "Package",
+              "version": "[8.2.1, )"
             }
           },
           "imports": [

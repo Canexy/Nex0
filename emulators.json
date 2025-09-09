@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "dsf",
+    "ExecutablePath": "sdf",
+    "Arguments": "-fullscreen -rom",
+    "AssociatedExtensions": [
+      "sdf"
+    ],
+    "Configuration": "Default",
+    "IconPath": "",
+    "Options": [],
+    "ExtensionsDisplay": "sdf"
+  }
+]

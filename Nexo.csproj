@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -17,6 +17,8 @@
     <PackageReference Include="Avalonia.Diagnostics" Version="11.1.0">
       <IncludeAssets Condition="'$(Configuration)' == 'Debug'">all</IncludeAssets>
     </PackageReference>
+    <!-- Añade CommunityToolkit.Mvvm -->
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 </Project>
