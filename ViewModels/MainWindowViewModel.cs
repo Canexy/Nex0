@@ -21,6 +21,7 @@ namespace Nexo.ViewModels
         private readonly DataService _dataService = new DataService();
         private CancellationTokenSource _messageCancellationTokenSource;
         
+        // CAMBIO IMPORTANTE: Usar ObservableCollection en lugar de List
         [ObservableProperty]
         private ObservableCollection<EmulatorViewModel> _emulators = new();
         
@@ -62,9 +63,13 @@ namespace Nexo.ViewModels
             if (window == null) return;
 
             var dialog = new AddEmulatorDialog();
+            // Crear explícitamente el ViewModel y asignarlo
+            var vm = new AddEmulatorViewModel();
+            dialog.DataContext = vm;
+            
             var result = await dialog.ShowDialog<bool>(window);
             
-            if (result && dialog.DataContext is AddEmulatorViewModel vm)
+            if (result)
             {
                 var newEmulator = new Emulator
                 {
@@ -74,17 +79,11 @@ namespace Nexo.ViewModels
                         StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList()
                 };
                 
-                var newEmulatorViewModel = new EmulatorViewModel(newEmulator);
-                Emulators.Add(newEmulatorViewModel);
-                
-                // Forzar actualización de la UI
-                OnPropertyChanged(nameof(Emulators));
+                // Añadir el nuevo emulador a la colección observable
+                Emulators.Add(new EmulatorViewModel(newEmulator));
                 
                 SaveEmulators();
                 ShowMessage("Emulador agregado correctamente", 3000);
-                
-                // Seleccionar el nuevo emulador para forzar la actualización
-                SelectedEmulator = newEmulatorViewModel;
             }
         }
 

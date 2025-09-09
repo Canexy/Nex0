@@ -94,5 +94,30 @@
     "IconPath": "",
     "Options": [],
     "ExtensionsDisplay": "vc"
+  },
+  {
+    "Name": "Maric\u00F3n",
+    "ExecutablePath": "C:\\Users\\mario\\Downloads\\RunCat-x64\\RunCat.exe",
+    "Arguments": "-fullscreen -rom",
+    "AssociatedExtensions": [
+      ".nds",
+      ".cia"
+    ],
+    "Configuration": "Default",
+    "IconPath": "",
+    "Options": [],
+    "ExtensionsDisplay": ".nds, .cia"
+  },
+  {
+    "Name": "RunCat",
+    "ExecutablePath": "C:\\Users\\mario\\Downloads\\RunCat-x64\\RunCat.exe",
+    "Arguments": "-fullscreen -rom",
+    "AssociatedExtensions": [
+      ".exe"
+    ],
+    "Configuration": "Default",
+    "IconPath": "",
+    "Options": [],
+    "ExtensionsDisplay": ".exe"
   }
 ]
