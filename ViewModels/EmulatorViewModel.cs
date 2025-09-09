@@ -33,18 +33,17 @@ namespace Nexo.ViewModels
         [ObservableProperty]
         private string _iconPath;
 
-        // Añade esta propiedad para mostrar las extensiones en el DataGrid
         public string ExtensionsDisplay => string.Join(", ", _emulator.AssociatedExtensions);
 
         public EmulatorViewModel(Emulator emulator)
         {
             _emulator = emulator;
-            _name = emulator.Name;
-            _executablePath = emulator.ExecutablePath;
-            _arguments = emulator.Arguments;
-            _extensions = string.Join(", ", emulator.AssociatedExtensions);
-            _configuration = emulator.Configuration;
-            _iconPath = emulator.IconPath;
+            Name = emulator.Name;
+            ExecutablePath = emulator.ExecutablePath;
+            Arguments = emulator.Arguments;
+            Extensions = string.Join(", ", emulator.AssociatedExtensions);
+            Configuration = emulator.Configuration;
+            IconPath = emulator.IconPath;
         }
 
         public Emulator GetModel()
@@ -59,21 +58,22 @@ namespace Nexo.ViewModels
             _emulator.Configuration = Configuration;
             _emulator.IconPath = IconPath;
             
+            // Notificar que ExtensionsDisplay ha cambiado
+            OnPropertyChanged(nameof(ExtensionsDisplay));
+            
             return _emulator;
         }
 
         [RelayCommand]
-        public async Task LaunchGame(string? gamePath = null)  // Cambiado de private a public
+        public async Task LaunchGame(string? gamePath = null)
         {
             if (string.IsNullOrEmpty(ExecutablePath))
             {
-                // Mostrar mensaje de error
                 return;
             }
 
             string path = gamePath ?? "";
             
-            // Si no se proporciona una ruta de juego, abrir diálogo de selección
             if (string.IsNullOrEmpty(path))
             {
                 var window = GetMainWindow();
@@ -97,7 +97,6 @@ namespace Nexo.ViewModels
                 }
             }
             
-            // Lanzar el emulador con el juego
             if (!string.IsNullOrEmpty(path))
             {
                 try
@@ -138,7 +137,7 @@ namespace Nexo.ViewModels
             }
         }
 
-        private Window? GetMainWindow()  // Añadido el nullable operator
+        private Window? GetMainWindow()
         {
             if (Avalonia.Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktopLifetime)
             {

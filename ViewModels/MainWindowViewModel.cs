@@ -12,12 +12,14 @@ using System;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using System.Threading;
 
 namespace Nexo.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
         private readonly DataService _dataService = new DataService();
+        private CancellationTokenSource _messageCancellationTokenSource;
         
         [ObservableProperty]
         private ObservableCollection<EmulatorViewModel> _emulators = new();
@@ -34,11 +36,13 @@ namespace Nexo.ViewModels
         public MainWindowViewModel()
         {
             LoadEmulators();
+            _messageCancellationTokenSource = new CancellationTokenSource();
         }
 
         private void LoadEmulators()
         {
             var emulators = _dataService.LoadEmulators();
+            Emulators.Clear();
             foreach (var emulator in emulators)
             {
                 Emulators.Add(new EmulatorViewModel(emulator));
@@ -70,9 +74,17 @@ namespace Nexo.ViewModels
                         StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList()
                 };
                 
-                Emulators.Add(new EmulatorViewModel(newEmulator));
+                var newEmulatorViewModel = new EmulatorViewModel(newEmulator);
+                Emulators.Add(newEmulatorViewModel);
+                
+                // Forzar actualización de la UI
+                OnPropertyChanged(nameof(Emulators));
+                
                 SaveEmulators();
-                ShowMessage("Emulador agregado correctamente");
+                ShowMessage("Emulador agregado correctamente", 3000);
+                
+                // Seleccionar el nuevo emulador para forzar la actualización
+                SelectedEmulator = newEmulatorViewModel;
             }
         }
 
@@ -89,8 +101,11 @@ namespace Nexo.ViewModels
             
             if (result)
             {
+                // Forzar actualización de la UI
+                OnPropertyChanged(nameof(Emulators));
+                
                 SaveEmulators();
-                ShowMessage("Emulador actualizado correctamente");
+                ShowMessage("Emulador actualizado correctamente", 3000);
             }
         }
 
@@ -100,8 +115,14 @@ namespace Nexo.ViewModels
             if (SelectedEmulator != null)
             {
                 Emulators.Remove(SelectedEmulator);
+                
+                // Forzar actualización de la UI
+                OnPropertyChanged(nameof(Emulators));
+                
                 SaveEmulators();
-                ShowMessage("Emulador eliminado correctamente");
+                ShowMessage("Emulador eliminado correctamente", 3000);
+                
+                SelectedEmulator = null;
             }
         }
 
@@ -131,19 +152,16 @@ namespace Nexo.ViewModels
                 
                 if (compatibleEmulators.Count == 1)
                 {
-                    // Si solo hay un emulador compatible, usarlo directamente
-                    await compatibleEmulators[0].LaunchGame(gamePath);  // Ahora es accesible
-                    ShowMessage($"Ejecutando {System.IO.Path.GetFileName(gamePath)} con {compatibleEmulators[0].Name}");
+                    await compatibleEmulators[0].LaunchGame(gamePath);
+                    ShowMessage($"Ejecutando {System.IO.Path.GetFileName(gamePath)} con {compatibleEmulators[0].Name}", 3000);
                 }
                 else if (compatibleEmulators.Count > 1)
                 {
-                    // Si hay múltiples emuladores compatibles, mostrar diálogo de selección
-                    ShowMessage("Múltiples emuladores compatibles. Implementar selección.");
-                    // TODO: Implementar diálogo de selección de emulador
+                    ShowMessage("Múltiples emuladores compatibles. Implementar selección.", 3000);
                 }
                 else
                 {
-                    ShowMessage($"No hay emuladores configurados para la extensión {extension}");
+                    ShowMessage($"No hay emuladores configurados para la extensión {extension}", 3000);
                 }
             }
         }
@@ -152,17 +170,29 @@ namespace Nexo.ViewModels
         private void ToggleTheme()
         {
             IsDarkMode = !IsDarkMode;
-            // Aquí deberías implementar la lógica para cambiar el tema de la aplicación
         }
 
-        public void ShowMessage(string msg, int durationMs = 2500)
+        public async void ShowMessage(string msg, int durationMs = 2500)
         {
+            // Cancelar cualquier mensaje anterior
+            _messageCancellationTokenSource.Cancel();
+            _messageCancellationTokenSource = new CancellationTokenSource();
+            
             Message = msg;
-            // Implementar lógica para ocultar el mensaje después de un tiempo
-            // Puedes usar un Timer o una función async
+            
+            try
+            {
+                // Esperar el tiempo especificado y luego limpiar el mensaje
+                await Task.Delay(durationMs, _messageCancellationTokenSource.Token);
+                Message = "";
+            }
+            catch (TaskCanceledException)
+            {
+                // El mensaje fue cancelado por uno nuevo, no hacer nada
+            }
         }
 
-        private Window? GetMainWindow()  // Añadido el nullable operator
+        private Window? GetMainWindow()
         {
             if (Avalonia.Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktopLifetime)
             {

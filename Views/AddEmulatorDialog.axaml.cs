@@ -5,7 +5,7 @@ using Nexo.ViewModels;
 
 namespace Nexo.Views
 {
-    public partial class AddEmulatorDialog : Window
+    public partial class AddEmulatorDialog : Window  // Debe ser AddEmulatorDialog
     {
         public AddEmulatorDialog()
         {
@@ -13,6 +13,11 @@ namespace Nexo.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
+            // Asegurarse de que el DataContext se establece
+            if (DataContext == null)
+            {
+                DataContext = new AddEmulatorViewModel();
+            }
         }
 
         private void InitializeComponent()

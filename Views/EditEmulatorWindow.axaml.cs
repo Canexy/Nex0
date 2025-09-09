@@ -5,7 +5,7 @@ using Nexo.ViewModels;
 
 namespace Nexo.Views
 {
-    public partial class EditEmulatorWindow : Window
+    public partial class EditEmulatorWindow : Window  // Debe ser EditEmulatorWindow
     {
         public EditEmulatorWindow()
         {
