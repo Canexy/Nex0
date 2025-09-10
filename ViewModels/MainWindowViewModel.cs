@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Linq; // Añade esta línea
+using System.Linq;
 using System;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls;
@@ -57,7 +57,7 @@ namespace Nexo.ViewModels
                 Emulators.Clear();
                 foreach (var emulator in emulators)
                 {
-                    Emulators.Add(new EmulatorViewModel(emulator));
+                    Emulators.Add(new EmulatorViewModel(emulator, this));
                 }
                 
                 // Force UI update
@@ -74,6 +74,20 @@ namespace Nexo.ViewModels
         {
             var emulatorModels = Emulators.Select(e => e.GetModel()).ToList();
             _dataService.SaveEmulators(emulatorModels);
+        }
+
+        // Método para editar un emulador específico
+        public async void EditEmulator(EmulatorViewModel emulatorViewModel)
+        {
+            SelectedEmulator = emulatorViewModel;
+            await EditEmulator();
+        }
+
+        // Método para eliminar un emulador específico
+        public void DeleteEmulator(EmulatorViewModel emulatorViewModel)
+        {
+            SelectedEmulator = emulatorViewModel;
+            DeleteEmulator();
         }
 
         [RelayCommand]
@@ -94,14 +108,13 @@ namespace Nexo.ViewModels
                 {
                     Name = vm.Name,
                     ExecutablePath = vm.ExecutablePath,
-                    // Corrige esta línea
                     AssociatedExtensions = vm.Extensions.Split(',', 
                         StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                         .ToList()
                 };
                 
                 // Add to the observable collection
-                Emulators.Add(new EmulatorViewModel(newEmulator));
+                Emulators.Add(new EmulatorViewModel(newEmulator, this));
                 
                 SaveEmulators();
                 ShowMessage("Emulador agregado correctamente", 3000);

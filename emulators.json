@@ -1,15 +1,1 @@
-[
-  {
-    "Name": "Test",
-    "ExecutablePath": "C:\\Users\\mario\\Downloads\\RunCat-x64\\RunCat.exe",
-    "Arguments": "-fullscreen -rom",
-    "AssociatedExtensions": [
-      ".ds",
-      ".cia"
-    ],
-    "Configuration": "Default",
-    "IconPath": "",
-    "Options": [],
-    "ExtensionsDisplay": ".ds, .cia"
-  }
-]
+[]

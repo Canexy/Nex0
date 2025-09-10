@@ -14,6 +14,7 @@ namespace Nexo.ViewModels
     public partial class EmulatorViewModel : ViewModelBase
     {
         private readonly Emulator _emulator;
+        private readonly MainWindowViewModel _mainViewModel;
         
         [ObservableProperty]
         private string _name;
@@ -35,9 +36,10 @@ namespace Nexo.ViewModels
 
         public string ExtensionsDisplay => string.Join(", ", _emulator.AssociatedExtensions);
 
-        public EmulatorViewModel(Emulator emulator)
+        public EmulatorViewModel(Emulator emulator, MainWindowViewModel mainViewModel)
         {
             _emulator = emulator;
+            _mainViewModel = mainViewModel;
             Name = emulator.Name;
             ExecutablePath = emulator.ExecutablePath;
             Arguments = emulator.Arguments;
@@ -135,6 +137,22 @@ namespace Nexo.ViewModels
             {
                 ExecutablePath = result[0].Path.LocalPath;
             }
+        }
+
+        [RelayCommand]
+        public void Edit()
+        {
+            // Este comando se conectará con la funcionalidad de edición
+            // La lógica específica se manejará en MainWindowViewModel
+            _mainViewModel.EditEmulator(this);
+        }
+
+        [RelayCommand]
+        public void Delete()
+        {
+            // Este comando se conectará con la funcionalidad de eliminación
+            // La lógica específica se manejará en MainWindowViewModel
+            _mainViewModel.DeleteEmulator(this);
         }
 
         private Window? GetMainWindow()
