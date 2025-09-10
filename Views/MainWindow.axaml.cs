@@ -1,25 +1,54 @@
-using Avalonia.Controls;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Nexo.ViewModels;
+using Nexo.Views;
 using System;
+using System.Diagnostics;
 
-namespace Nexo.Views
+namespace Nexo
 {
-    public partial class MainWindow : Window
+    public partial class App : Application
     {
-        public MainWindow()
+        public override void Initialize()
         {
-            InitializeComponent();
-            this.Closing += MainWindow_Closing;
+            try
+            {
+                AvaloniaXamlLoader.Load(this);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"XAML Loading Error: {ex}");
+                throw;
+            }
         }
 
-        private void MainWindow_Closing(object? sender, WindowClosingEventArgs e)
+        public override void OnFrameworkInitializationCompleted()
         {
-            Console.WriteLine("La ventana se está cerrando");
-        }
+            // Eliminar validación de datos para mejorar el rendimiento
+            if (BindingPlugins.DataValidators.Count > 0)
+            {
+                BindingPlugins.DataValidators.RemoveAt(0);
+            }
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                try
+                {
+                    desktop.MainWindow = new MainWindow
+                    {
+                        DataContext = new MainWindowViewModel()
+                    };
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"MainWindow creation failed: {ex}");
+                    throw;
+                }
+            }
+
+            base.OnFrameworkInitializationCompleted();
         }
     }
 }

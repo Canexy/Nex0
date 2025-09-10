@@ -36,18 +36,27 @@ namespace Nexo.ViewModels
 
         public MainWindowViewModel()
         {
+            Debug.WriteLine("MainWindowViewModel constructor started");
             LoadEmulators();
             _messageCancellationTokenSource = new CancellationTokenSource();
+            Debug.WriteLine("MainWindowViewModel constructor completed");
         }
 
         private void LoadEmulators()
         {
+            Debug.WriteLine("Loading emulators...");
             var emulators = _dataService.LoadEmulators();
+            Debug.WriteLine($"Found {emulators.Count} emulators");
+            
             Emulators.Clear();
             foreach (var emulator in emulators)
             {
                 Emulators.Add(new EmulatorViewModel(emulator));
             }
+            
+            // Force UI update
+            OnPropertyChanged(nameof(Emulators));
+            Debug.WriteLine("Emulators loaded successfully");
         }
 
         public void SaveEmulators()
@@ -63,7 +72,6 @@ namespace Nexo.ViewModels
             if (window == null) return;
 
             var dialog = new AddEmulatorDialog();
-            // Crear explícitamente el ViewModel y asignarlo
             var vm = new AddEmulatorViewModel();
             dialog.DataContext = vm;
             
@@ -79,11 +87,14 @@ namespace Nexo.ViewModels
                         StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList()
                 };
                 
-                // Añadir el nuevo emulador a la colección observable
+                // Add to the observable collection
                 Emulators.Add(new EmulatorViewModel(newEmulator));
                 
                 SaveEmulators();
                 ShowMessage("Emulador agregado correctamente", 3000);
+                
+                // Force UI update
+                OnPropertyChanged(nameof(Emulators));
             }
         }
 

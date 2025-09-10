@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using Nexo.ViewModels;
 using Nexo.Views;
 using System;
+using System.Diagnostics;
 
 namespace Nexo
 {
@@ -12,7 +13,15 @@ namespace Nexo
     {
         public override void Initialize()
         {
-            AvaloniaXamlLoader.Load(this);
+            try
+            {
+                AvaloniaXamlLoader.Load(this);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"XAML Loading Error: {ex}");
+                throw;
+            }
         }
 
         public override void OnFrameworkInitializationCompleted()
@@ -25,10 +34,18 @@ namespace Nexo
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow
+                try
                 {
-                    DataContext = new MainWindowViewModel()
-                };
+                    desktop.MainWindow = new MainWindow
+                    {
+                        DataContext = new MainWindowViewModel()
+                    };
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"MainWindow creation failed: {ex}");
+                    throw;
+                }
             }
 
             base.OnFrameworkInitializationCompleted();

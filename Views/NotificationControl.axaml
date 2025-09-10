@@ -1,5 +1,39 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="Nexo.Views.NotificationControl">
-    <TextBlock Text="Notification Placeholder"/>
+             x:Class="Nexo.Views.NotificationControl"
+             Width="300" Height="80">
+    
+    <Border Background="#262626" CornerRadius="10" Padding="10">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Icon -->
+            <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" 
+                    Background="{Binding IconBackground, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                    Margin="0,0,10,0">
+                <PathIcon Data="{Binding IconData, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                          Foreground="{Binding IconForeground, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                          Width="24" Height="24"/>
+            </Border>
+            
+            <!-- Content -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                           FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="{Binding Message, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                           Foreground="#A3A3A3" FontSize="12"/>
+            </StackPanel>
+            
+            <!-- Close button -->
+            <Button Grid.Column="2" Background="Transparent" BorderThickness="0" 
+                    Command="{Binding CloseCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                <PathIcon Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12Z"
+                         Foreground="#A3A3A3" Width="20" Height="20"/>
+            </Button>
+        </Grid>
+    </Border>
 </UserControl>
