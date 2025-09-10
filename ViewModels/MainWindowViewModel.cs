@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Linq;
+using System.Linq; // Añade esta línea
 using System;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls;
@@ -36,9 +36,14 @@ namespace Nexo.ViewModels
 
         public MainWindowViewModel()
         {
+            Debug.WriteLine("MainWindowViewModel constructor started");
             _messageCancellationTokenSource = new CancellationTokenSource();
-            // Cargar emuladores de forma asíncrona
-            Task.Run(() => LoadEmulators());
+            // Cargar emuladores de forma asíncrona después de un breve retraso
+            Task.Delay(1000).ContinueWith(_ => 
+            {
+                LoadEmulators();
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+            Debug.WriteLine("MainWindowViewModel constructor completed");
         }
 
         private void LoadEmulators()
@@ -49,16 +54,15 @@ namespace Nexo.ViewModels
                 var emulators = _dataService.LoadEmulators();
                 Debug.WriteLine($"Found {emulators.Count} emulators");
                 
-                // Usar el dispatcher para actualizar la UI
-                Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                Emulators.Clear();
+                foreach (var emulator in emulators)
                 {
-                    Emulators.Clear();
-                    foreach (var emulator in emulators)
-                    {
-                        Emulators.Add(new EmulatorViewModel(emulator));
-                    }
-                    Debug.WriteLine("Emulators loaded successfully");
-                });
+                    Emulators.Add(new EmulatorViewModel(emulator));
+                }
+                
+                // Force UI update
+                OnPropertyChanged(nameof(Emulators));
+                Debug.WriteLine("Emulators loaded successfully");
             }
             catch (Exception ex)
             {
@@ -90,8 +94,10 @@ namespace Nexo.ViewModels
                 {
                     Name = vm.Name,
                     ExecutablePath = vm.ExecutablePath,
+                    // Corrige esta línea
                     AssociatedExtensions = vm.Extensions.Split(',', 
-                        StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList()
+                        StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                        .ToList()
                 };
                 
                 // Add to the observable collection

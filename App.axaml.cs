@@ -18,11 +18,20 @@ namespace Nexo
 
         public override void OnFrameworkInitializationCompleted()
         {
+            // Eliminar validación de datos duplicada
+            if (BindingPlugins.DataValidators.Count > 0)
+            {
+                var dataValidationPluginsToRemove = 
+                    BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+                
+                foreach (var plugin in dataValidationPluginsToRemove)
+                {
+                    BindingPlugins.DataValidators.Remove(plugin);
+                }
+            }
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                // Eliminar validación de datos duplicada
-                DisableAvaloniaDataAnnotationValidation();
-                
                 desktop.MainWindow = new MainWindow
                 {
                     DataContext = new MainWindowViewModel(),
@@ -30,17 +39,6 @@ namespace Nexo
             }
 
             base.OnFrameworkInitializationCompleted();
-        }
-
-        private void DisableAvaloniaDataAnnotationValidation()
-        {
-            var dataValidationPluginsToRemove =
-                BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-
-            foreach (var plugin in dataValidationPluginsToRemove)
-            {
-                BindingPlugins.DataValidators.Remove(plugin);
-            }
         }
     }
 }

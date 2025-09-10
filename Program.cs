@@ -1,5 +1,6 @@
 using Avalonia;
 using System;
+using System.IO;
 
 namespace Nexo
 {
@@ -15,7 +16,9 @@ namespace Nexo
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Application failed to start: {ex}");
+                // Registrar el error en un archivo
+                File.WriteAllText("error_log.txt", $"Application failed: {ex}");
+                Console.WriteLine($"Application failed: {ex}");
             }
         }
 

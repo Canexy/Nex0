@@ -1,8 +1,0 @@
-Window Creation Error: System.IO.FileNotFoundException: The resource https://lh3.googleusercontent.com/aida-public/AB6AXuDiv7_2VJ7AsuMBEkxYL0R2llSW42iCdn5se5sZNple_EMswH1df6Sf6sxLC5eFo2We4yr69ADq_x5btTetalFscsGX17r4dfyl0eatyh5mr5YJghwx1VwCNNNCyrycZ1MR12jy7UhtOX0__LqXT1IKN6JlDWx3zoI7YGJMs5hfPewGesi2_cSlmKzD3kCfR4oFsmqHxvMe6f7qK5gIW4jTygpSpN1YImzQZw-iiA1HQegudIN4RsaOwghd_hhXGTZo5qTCn1C31SvH could not be found.
-   at Avalonia.Platform.StandardAssetLoader.OpenAndGetAssembly(Uri uri, Uri baseUri)
-   at Avalonia.Platform.StandardAssetLoader.Open(Uri uri, Uri baseUri)
-   at Avalonia.Markup.Xaml.Converters.BitmapTypeConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)
-   at Nexo.Views.MainWindow.!XamlIlPopulate(IServiceProvider, MainWindow) in C:\Users\mario\Repositorios\Nex0\Views/MainWindow.axaml:line 100
-   at Nexo.Views.MainWindow.!XamlIlPopulateTrampoline(MainWindow)
-   at Nexo.Views.MainWindow.InitializeComponent() in C:\Users\mario\Repositorios\Nex0\Views\MainWindow.axaml.cs:line 34
-   at Nexo.Views.MainWindow..ctor() in C:\Users\mario\Repositorios\Nex0\Views\MainWindow.axaml.cs:line 14
