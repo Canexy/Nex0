@@ -13,6 +13,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Nexo.ViewModels
 {
@@ -21,7 +22,6 @@ namespace Nexo.ViewModels
         private readonly DataService _dataService = new DataService();
         private CancellationTokenSource _messageCancellationTokenSource;
         
-        // CAMBIO IMPORTANTE: Usar ObservableCollection en lugar de List
         [ObservableProperty]
         private ObservableCollection<EmulatorViewModel> _emulators = new();
         
@@ -36,27 +36,34 @@ namespace Nexo.ViewModels
 
         public MainWindowViewModel()
         {
-            Debug.WriteLine("MainWindowViewModel constructor started");
-            LoadEmulators();
             _messageCancellationTokenSource = new CancellationTokenSource();
-            Debug.WriteLine("MainWindowViewModel constructor completed");
+            // Cargar emuladores de forma asíncrona
+            Task.Run(() => LoadEmulators());
         }
 
         private void LoadEmulators()
         {
-            Debug.WriteLine("Loading emulators...");
-            var emulators = _dataService.LoadEmulators();
-            Debug.WriteLine($"Found {emulators.Count} emulators");
-            
-            Emulators.Clear();
-            foreach (var emulator in emulators)
+            try
             {
-                Emulators.Add(new EmulatorViewModel(emulator));
+                Debug.WriteLine("Loading emulators...");
+                var emulators = _dataService.LoadEmulators();
+                Debug.WriteLine($"Found {emulators.Count} emulators");
+                
+                // Usar el dispatcher para actualizar la UI
+                Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    Emulators.Clear();
+                    foreach (var emulator in emulators)
+                    {
+                        Emulators.Add(new EmulatorViewModel(emulator));
+                    }
+                    Debug.WriteLine("Emulators loaded successfully");
+                });
             }
-            
-            // Force UI update
-            OnPropertyChanged(nameof(Emulators));
-            Debug.WriteLine("Emulators loaded successfully");
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading emulators: {ex}");
+            }
         }
 
         public void SaveEmulators()

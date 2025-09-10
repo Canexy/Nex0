@@ -10,11 +10,12 @@ namespace Nexo
         {
             try
             {
-                BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+                BuildAvaloniaApp()
+                    .StartWithClassicDesktopLifetime(args);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Application failed: {ex}");
+                Console.WriteLine($"Application failed to start: {ex}");
             }
         }
 
